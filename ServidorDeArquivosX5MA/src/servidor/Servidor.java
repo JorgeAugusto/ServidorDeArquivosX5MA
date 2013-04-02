@@ -6,7 +6,6 @@
 
 package servidor;
 
-import base.OLD_Host;
 import base.Host;
 import java.net.ServerSocket;
 import java.util.ArrayList;
