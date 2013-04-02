@@ -19,12 +19,14 @@ public class ConexaoEscravo implements Runnable {
     private ObjectInputStream       entrada;
     private ObjectOutputStream      saida;
     private Escravo                 escravo;
-    private int                     id;                 // identificador da conexão.
     private Mensagem                mensagemRecebida;
     private Mensagem                mensagemEnviada;
     private ArrayList<Arquivo>      listaArquivos;
     private TipoConexao             tipoConexao;
 
+    /**
+     * Construtor.
+     */
     public ConexaoEscravo(Socket socket, Escravo escravo, TipoConexao tipo) throws Exception {
         this.socket         = socket;
         this.escravo        = escravo;
