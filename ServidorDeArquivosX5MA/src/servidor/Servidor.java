@@ -6,6 +6,7 @@
 
 package servidor;
 
+import base.Arquivo;
 import base.Host;
 import java.net.ServerSocket;
 import java.util.ArrayList;
@@ -14,6 +15,7 @@ public class Servidor {
     private ServerSocket                socket;
     private ArrayList<ConexaoServidor>  listaClientes;
     private ArrayList<ConexaoServidor>  listaEscravos;
+    private ArrayList<Arquivo>          listaArquivos;
 
     /**
      * Construtor
@@ -23,6 +25,7 @@ public class Servidor {
 
         listaClientes = new ArrayList<ConexaoServidor>();
         listaEscravos = new ArrayList<ConexaoServidor>();
+        listaArquivos = new ArrayList<Arquivo>();
     }
 
 
@@ -30,8 +33,25 @@ public class Servidor {
      * Este método atualiza a listagem dos arquivo no servidor, com base em todos os servidores escravos (2)
      */
     public synchronized void atualizarListaArquivos() {
-        for(ConexaoServidor ) {
+        listaArquivos.clear();
 
+        // Para cada escravo da lista de escravos, pega todos os arquivos do mesmo...
+        for(ConexaoServidor escravo : listaEscravos) {
+            listaArquivos.addAll(escravo.getListaArquivo());
+        }
+
+        // Depois de atualizar a lista de arquivos, mostra a mesma.
+        mostarListaArquivos();
+    }
+
+    /**
+     * Este método é somente para os testes...
+     */
+
+    public synchronized void mostarListaArquivos() {
+        System.out.println("--- LISTAGEM DE ARQUIVOS ---");
+        for(Arquivo arquivo : listaArquivos) {
+            System.out.println(arquivo.getNome());
         }
     }
 
