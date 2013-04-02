@@ -42,12 +42,15 @@ public class Servidor {
         /**
          * Loop infinito que recebe as conexão e cria as novas Thread's
          */
+        System.out.println("Servidor Inciado com sucesso, aguardando conexões...");
+
         for(;;) {
             try {
                 new Thread(new Conexao(servidor.socket.accept(), servidor)).start();
+                System.out.println("Conexão estabelecida com sucesso.");
             }
             catch(Exception ex) {
-                System.err.println("Erro ao criar nova Thread de conexão");
+                System.err.println("Erro ao criar nova Thread de conexão do servidor");
             }
         }
     }
