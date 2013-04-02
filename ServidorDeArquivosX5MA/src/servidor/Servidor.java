@@ -28,7 +28,6 @@ public class Servidor {
         listaArquivos = new ArrayList<Arquivo>();
     }
 
-
     /**
      * Este método atualiza a listagem dos arquivo no servidor, com base em todos os servidores escravos (2)
      */
@@ -47,7 +46,6 @@ public class Servidor {
     /**
      * Este método é somente para os testes...
      */
-
     public synchronized void mostarListaArquivos() {
         System.out.println("--- LISTAGEM DE ARQUIVOS ---");
         for(Arquivo arquivo : listaArquivos) {
