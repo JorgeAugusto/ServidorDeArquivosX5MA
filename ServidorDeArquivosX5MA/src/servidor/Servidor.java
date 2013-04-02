@@ -20,6 +20,33 @@ public class Servidor {
      */
     public Servidor() throws Exception {
         socket = new ServerSocket(Host.SERVIDOR.porta);
+
+        listaClientes = new ArrayList<ConexaoServidor>();
+        listaEscravos = new ArrayList<ConexaoServidor>();
+    }
+
+
+    /**
+     * Este método atualiza a listagem dos arquivo no servidor, com base em todos os servidores escravos (2)
+     */
+    public synchronized void atualizarListaArquivos() {
+        for(ConexaoServidor ) {
+
+        }
+    }
+
+    /**
+     * Retorna a lista de escravos...
+     */
+    public ArrayList<ConexaoServidor> getListaEscravos() {
+         return listaEscravos;
+    }
+
+    /**
+     * Retorna a lista de clientes...
+     */
+    public ArrayList<ConexaoServidor> getListaClientes() {
+         return listaClientes;
     }
 
     /**
