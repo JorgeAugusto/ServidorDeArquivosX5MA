@@ -40,7 +40,9 @@ public class ConexaoEscravo implements Runnable {
     @Override
     public void run() {
         // Se for uma conexão com o servidor então envia identificação
-        if(tipoConexao == TipoConexao.ESCRAVO) enviarIdentificacao();
+        if(tipoConexao == TipoConexao.ESCRAVO) {
+            enviarIdentificacao();
+        }
 
         for(;;) {
             // Se o socke esta fechado então terminar Thread.
@@ -101,7 +103,6 @@ public class ConexaoEscravo implements Runnable {
         }
     }
 
-
     /**
      * Este método envia uma mensagem informando o tipoConexao de conexão desta Thread
      */
@@ -121,6 +122,22 @@ public class ConexaoEscravo implements Runnable {
         System.out.println("Identificação enviada com sucesso.");
     }
 
+
+    /**
+     * Este método envia uma mensagem contendo a lista de arquivos que estão no escravo
+     */
+    private void enviarListaDeArquivos() {
+        try {
+            mensagemEnviada = new Mensagem(Mensagem.TipoMensagem.LISTA_ARQUIVOS, null);
+
+            // envia listagem de arquivos...
+            saida.writeObject(mensagemEnviada);
+            saida.flush();
+        }
+        catch(Exception ex) {
+            System.err.println("Erro ao enviar lista de arquivos para o servidor");
+        }
+    }
 
     /**
      * Este método processa a mensagem de identificação

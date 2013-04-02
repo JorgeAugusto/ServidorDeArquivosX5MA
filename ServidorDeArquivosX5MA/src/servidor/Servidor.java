@@ -11,9 +11,9 @@ import java.net.ServerSocket;
 import java.util.ArrayList;
 
 public class Servidor {
-    private ServerSocket         socket;
-    private ArrayList<ConexaoServidor>   listaClientes;
-    private ArrayList<ConexaoServidor>   listaEscravos;
+    private ServerSocket                socket;
+    private ArrayList<ConexaoServidor>  listaClientes;
+    private ArrayList<ConexaoServidor>  listaEscravos;
 
     /**
      * Construtor

@@ -15,8 +15,10 @@ import java.util.ArrayList;
 public class Escravo {
     private ServerSocket                socket;
     private ArrayList<ConexaoEscravo>   listaClientes;
+    private String                      nome;
 
     public Escravo(Host hostEscravo) throws Exception {
+        this.nome = hostEscravo.toString();
         socket = new ServerSocket(hostEscravo.porta);
     }
 
@@ -30,11 +32,11 @@ public class Escravo {
             new Thread(new ConexaoEscravo(new Socket(Host.SERVIDOR.ip, Host.SERVIDOR.porta), this, TipoConexao.ESCRAVO)).start();
         }
         catch(Exception ex) {
-            System.err.println("Erro ao criar nova Thread de conexão do Escravo, inicialização abortada");
+            System.err.println("Erro ao criar nova Thread de conexão do " + nome + ", inicialização abortada");
             return;
         }
 
-        System.out.println("Escravo Inciado com sucesso, aguardando conexões de clientes...");
+        System.out.println(nome + " inciado com sucesso, aguardando conexões de clientes...");
 
         /**
          * Loop infinito que recebe as conexão dos clientes e cria as novas Thread's
@@ -45,7 +47,7 @@ public class Escravo {
                 System.out.println("Conexão com cliente estabelecida com sucesso.");
             }
             catch(Exception ex) {
-                System.err.println("Erro ao criar nova Thread de conexão do Escravo1");
+                System.err.println("Erro ao criar nova Thread de conexão do " + nome);
             }
         }
     }
