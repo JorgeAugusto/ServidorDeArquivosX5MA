@@ -9,6 +9,7 @@ package escravo;
 import base.Arquivo;
 import base.Mensagem;
 import base.TipoConexao;
+import java.io.File;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -141,30 +142,33 @@ public class ConexaoEscravo implements Runnable {
         }
     }
 
+
+    /**
+     * Este método cria a lista de arquivos a ser enviada para o servidor e
+     * a ser mostrada na tabela de arquivos na JanelaEscravo
+     */
+    public void montarListaArquivos() {
+        try {
+            File    pasta       = new File(PASTA_COMPARTILHADOS);
+
+            listaArquivos.clear();
+            for(File arquivo : pasta.listFiles()) {
+                if(arquivo.isFile()) {
+                    Arquivo arq = new Arquivo(arquivo.getName(), escravo.getHost(), arquivo.length());
+                    listaArquivos.add(arq);
+                }
+            }
+        }
+        catch(Exception ex) {
+            System.err.println("Erro ao montar listagem dos arquivos do " + escravo.getNome());
+        }
+    }
+
     /**
      * Este método processa a mensagem de identificação
      */
     public void processarIdentificacao() {
 
-    }
-
-    // Métodos privados
-    /**
-     * Este método envia ao servidor escravo uma solicitação para que mesmo
-     * envie uma lista contento os nomes dos arquivos que estão disponíveis
-     */
-    private synchronized void solicitarListaArquivos() {
-        try {
-            mensagemEnviada = new Mensagem(Mensagem.TipoMensagem.LISTA_ARQUIVOS, null);
-
-            saida.writeObject(mensagemEnviada);
-            saida.flush();
-        }
-        catch(Exception ex) {
-            System.err.println("Erro ao enviar solicitação de listagem de arquivos...");
-        }
-
-        System.out.println("Enviando solicitação de lista de arquivos. OK");
     }
 
     /**
