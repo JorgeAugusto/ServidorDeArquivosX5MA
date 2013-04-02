@@ -1,107 +1,23 @@
 /**
- * Classe que modela a informação de uma conexao (principal ou escravo)
- * @Descrição:
- * Esta classe modela as informações de conexão de um host servidor
- * que pode ser tando o servidor principal como um dos vários servidores
- * escravos
+ * Enum com as configurações de conexão
+ * @author Jorge Augusto C. dos Reis
  */
 
 package base;
 
-import java.io.*;
-import java.util.ArrayList;
+import java.io.Serializable;
 
-public class Host implements Serializable {
-    private String  nome;
-    private String  ip;
-    private int     porta;
+public enum Host implements Serializable {
+    SERVIDOR ("localhost",   2000),
+    ESCRAVO_1("localhost",   2001),
+    ESCRAVO_2("localhost",   2002);
 
-    public Host() { }
-
-    /**
-     * Construtor 1
-     */
-    public Host(int porta) {
-        this("", "", porta);
-    }
-
-
-    /**
-     * Contrutor 2
-     */
-    public Host(String nome, String ip, int porta) {
-        this.nome   = nome;
+    Host(String ip, int porta) {
         this.ip     = ip;
-        this.porta = porta;
+        this.porta  = porta;
     }
 
-    //<editor-fold defaultstate="collapsed" desc="SOMENTE PARA TESTES - DEVE SER RETIRADO MAIS TARDE">
-    // Somente para Teste
-    @Override
-    public String toString() {
-        return "[" + nome + ", " + ip + ", " + Integer.toString(porta) + "]";
-    }
-    //</editor-fold>
-
-    public String getNome() {
-        return nome;
-    }
-
-    public String getIp() {
-        return ip;
-    }
-
-    public int getPorta() {
-        return porta;
-    }
-
-    /**
-     * Este método salva um objeto desta classe em um arquivo informado.
-     */
-    public static void salvarEmArquivo(Host info, String nomeArquivo) throws Exception {
-        FileOutputStream    arquivo     = new FileOutputStream(nomeArquivo);
-        ObjectOutputStream  escritor    = new ObjectOutputStream(arquivo);
-
-        escritor.writeObject(info);
-        escritor.flush();
-        arquivo.close();
-    }
-
-    /**
-     * Este método carrega um objeto desta classe de um arquivo informado.
-     */
-    public static Host carregarDeArquivo(Host info, String nomeArquivo) throws Exception {
-        FileInputStream     arquivo     = new FileInputStream(nomeArquivo);
-        ObjectInputStream   leitor      = new ObjectInputStream(arquivo);
-
-        info = (Host) leitor.readObject();
-        arquivo.close();
-
-        return info;
-    }
-
-    /**
-     * Este método salva um ArrayList de objetos desta classe em um arquivo informado.
-     */
-    public static void salvarEmArquivo(ArrayList<Host> listaInfo, String nomeArquivo) throws Exception {
-        FileOutputStream    arquivo     = new FileOutputStream(nomeArquivo);
-        ObjectOutputStream  escritor    = new ObjectOutputStream(arquivo);
-
-        escritor.writeObject(listaInfo);
-        escritor.flush();
-        arquivo.close();
-    }
-
-    /**
-     * Este método carrega um objeto desta classe de um arquivo informado.
-     */
-    public static ArrayList<Host> carregarDeArquivo(ArrayList<Host> listaInfo, String nomeArquivo) throws Exception {
-        FileInputStream     arquivo     = new FileInputStream(nomeArquivo);
-        ObjectInputStream   leitor      = new ObjectInputStream(arquivo);
-
-        listaInfo = (ArrayList<Host>) leitor.readObject();
-        arquivo.close();
-
-        return listaInfo;
-    }
+    public String   ip;
+    public int      porta;
 }
+

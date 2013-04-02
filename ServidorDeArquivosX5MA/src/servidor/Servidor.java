@@ -6,24 +6,23 @@
 
 package servidor;
 
+import base.OLD_Host;
 import base.Host;
 import java.net.ServerSocket;
 import java.util.ArrayList;
 
 public class Servidor {
-    private int               idConexao;    // isso talvez saia...
-    private ServerSocket      socket;
-    private ArrayList<Host>   listaClientes;
-    private ArrayList<Host>   listaEscravos;
-    private Host              host;
+    private int                  idConexao;     // isso talvez saia...
+    private ServerSocket         socket;
+    private ArrayList<Conexao>   listaClientes;
+    private ArrayList<Conexao>   listaEscravos;
 
     /**
-     * Construtor, recebe um objeto host que contém a porta
+     * Construtor
      */
-    public Servidor(Host host) throws Exception {
-        idConexao = 1;
-        this.host = host;
-        socket    = new ServerSocket(host.getPorta());
+    public Servidor() throws Exception {
+        idConexao         = 1;
+        socket            = new ServerSocket(Host.SERVIDOR.porta);
     }
 
 
@@ -38,8 +37,7 @@ public class Servidor {
      * Método principal do Servidor
      */
     public static void main(String[] args) throws Exception {
-        Host     host     = new Host(2000);
-        Servidor servidor = new Servidor(host);
+        Servidor servidor       = new Servidor();
 
         /**
          * Loop infinito que recebe as conexão e cria as novas Thread's

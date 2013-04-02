@@ -10,9 +10,9 @@ package base;
 import java.io.Serializable;
 
 public class Arquivo implements Serializable {
-    private String  nome;
+    private String      nome;
     private Host    host;
-    private long    tamanho;
+    private long        tamanho;
 
     public Arquivo() { }
 
@@ -40,10 +40,9 @@ public class Arquivo implements Serializable {
      * @NOTA: Ele deve se movido daqui para a classe que tem a JTable
      */
     public String[] getArray() {
-        String[] array = new String[3];
+        String[] array = new String[2];
         array[0] = nome;
-        array[1] = host.getNome();
-        array[2] = getTamanhoIntuitivo();
+        array[1] = getTamanhoIntuitivo();
 
         return array;
     }
