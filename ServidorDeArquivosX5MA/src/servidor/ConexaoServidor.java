@@ -1,7 +1,5 @@
 /**
- * Classe que modela a Conexão de um Escravo
- * @author: Jorge Augusto C. dos Reis
- * @data..: 19/03/2013 às 07:45
+ * Classe que modela a Conexão com um cliente ou co
  * @Descrição:
  * Esta classe modela a Conexão do Servidor com um Escravo.
  */
@@ -10,13 +8,16 @@ package servidor;
 
 import base.Arquivo;
 import base.Mensagem;
-import base.TipoHost;
+import base.TipoConexao;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
-public class Conexao implements Runnable {
+public class ConexaoServidor implements Runnable {
     private Socket                  socket;
     private ObjectInputStream       entrada;
     private ObjectOutputStream      saida;
@@ -25,9 +26,9 @@ public class Conexao implements Runnable {
     private Mensagem                mensagemRecebida;
     private Mensagem                mensagemEnviada;
     private ArrayList<Arquivo>      listaArquivos;
-    private TipoHost                tipo;
+    private TipoConexao             tipoConexao;
 
-    public Conexao(Socket socket, Servidor servidor) throws Exception {
+    public ConexaoServidor(Socket socket, Servidor servidor) throws Exception {
         this.socket     = socket;
         this.servidor   = servidor;
         listaArquivos   = new ArrayList<Arquivo>();
@@ -41,7 +42,10 @@ public class Conexao implements Runnable {
 
     @Override
     public void run() {
-        solicitarIdentificacao();
+        /**
+         * Isto é possível pois a primeira ação de uma nova conexão é enviar
+         * uma mensagem idenfiticando do tipoConexao de host
+         */
         processarIdentificacao();
 
         for(;;) {
@@ -50,7 +54,7 @@ public class Conexao implements Runnable {
 
             try {
                 mensagemRecebida = (Mensagem) entrada.readObject();
-                switch(tipo) {
+                switch(tipoConexao) {
                     case CLIENTE:
                         processarMensagensCliente();
                     break;
@@ -103,21 +107,20 @@ public class Conexao implements Runnable {
         }
     }
 
-
-    /**
-     * Este método envia uma mensagem solicitando que o outro computador
-     * se identifique
-     */
-    public void solicitarIdentificacao() {
-
-    }
-
-
     /**
      * Este método processa a mensagem de identificação
      */
     public void processarIdentificacao() {
+        try {
+            mensagemRecebida = (Mensagem) entrada.readObject();
+            tipoConexao = (TipoConexao) mensagemRecebida.getInfoMensagem();
+        }
+        catch(Exception ex) {
+            System.err.println("Erro ao processar mensagem de identificação");
+            return;
+        }
 
+        System.out.println("Mensagem de Identificação processada com sucesso: " + tipoConexao.toString());
     }
 
     // Métodos privados
@@ -126,17 +129,17 @@ public class Conexao implements Runnable {
      * envie uma lista contento os nomes dos arquivos que estão disponíveis
      */
     private synchronized void solicitarListaArquivos() {
-        try {
-            mensagemEnviada = new Mensagem(Mensagem.TipoMensagem.LISTA_ARQUIVOS, null);
-
-            saida.writeObject(mensagemEnviada);
-            saida.flush();
-        }
-        catch(Exception ex) {
-            System.err.println("Erro ao enviar solicitação de listagem de arquivos...");
-        }
-
-        System.out.println("Enviando solicitação de lista de arquivos. OK");
+//        try {
+//            mensagemEnviada = new Mensagem(Mensagem.TipoMensagem.LISTA_ARQUIVOS, null);
+//
+//            saida.writeObject(mensagemEnviada);
+//            saida.flush();
+//        }
+//        catch(Exception ex) {
+//            System.err.println("Erro ao enviar solicitação de listagem de arquivos...");
+//        }
+//
+//        System.out.println("Enviando solicitação de lista de arquivos. OK");
     }
 
     /**
@@ -170,7 +173,7 @@ public class Conexao implements Runnable {
 //        try{
 //            ArrayList<Conexao> listaEscravos = servidor.getGerenteConexaoEscravos().getListaEscravos();
 //
-//            for(Conexao conEscravo : listaEscravos) {
+//            for(ConexaoServidor conEscravo : listaEscravos) {
 //                // Se esta desconectado passa para o próximo
 //                if(conEscravo.getEstado() == EstadoEscravo.DESCONECTADO) continue;
 //

@@ -1,7 +1,5 @@
 /**
  * Classe que modela a Conexão de um Escravo
- * @author: Jorge Augusto C. dos Reis
- * @data..: 19/03/2013 às 07:45
  * @Descrição:
  * Esta classe modela a Conexão do Escravo com um Escravo.
  */
@@ -10,7 +8,7 @@ package escravo;
 
 import base.Arquivo;
 import base.Mensagem;
-import base.TipoHost;
+import base.TipoConexao;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -25,13 +23,13 @@ public class ConexaoEscravo implements Runnable {
     private Mensagem                mensagemRecebida;
     private Mensagem                mensagemEnviada;
     private ArrayList<Arquivo>      listaArquivos;
-    private TipoHost                tipo;
+    private TipoConexao             tipoConexao;
 
-    public ConexaoEscravo(Socket socket, Escravo escravo, TipoHost tipo) throws Exception {
-        this.socket     = socket;
-        this.escravo    = escravo;
-        this.tipo       = tipo;
-        listaArquivos   = new ArrayList<Arquivo>();
+    public ConexaoEscravo(Socket socket, Escravo escravo, TipoConexao tipo) throws Exception {
+        this.socket         = socket;
+        this.escravo        = escravo;
+        this.tipoConexao    = tipo;
+        listaArquivos       = new ArrayList<Arquivo>();
 
         // limpa cabeçalho...
         saida       = new ObjectOutputStream(socket.getOutputStream());
@@ -41,13 +39,16 @@ public class ConexaoEscravo implements Runnable {
 
     @Override
     public void run() {
+        // Se for uma conexão com o servidor então envia identificação
+        if(tipoConexao == TipoConexao.ESCRAVO) enviarIdentificacao();
+
         for(;;) {
             // Se o socke esta fechado então terminar Thread.
             if(socket.isClosed()) return;
 
             try {
                 mensagemRecebida = (Mensagem) entrada.readObject();
-                switch(tipo) {
+                switch(tipoConexao) {
                     case CLIENTE:
                         processarMensagensClientes();
                     break;
@@ -102,11 +103,22 @@ public class ConexaoEscravo implements Runnable {
 
 
     /**
-     * Este método envia uma mensagem solicitando que o outro computador
-     * se identifique
+     * Este método envia uma mensagem informando o tipoConexao de conexão desta Thread
      */
-    public void solicitarIdentificacao() {
+    public void enviarIdentificacao() {
+        try {
+            mensagemEnviada = new Mensagem(Mensagem.TipoMensagem.IDENTIFICACAO, tipoConexao);
 
+            // envia listagem de arquivos...
+            saida.writeObject(mensagemEnviada);
+            saida.flush();
+        }
+        catch(Exception ex) {
+            System.err.println("Erro ao enviar mensagem de identificação");
+            return;
+        }
+
+        System.out.println("Identificação enviada com sucesso.");
     }
 
 

@@ -1,3 +1,9 @@
+/**
+ * Classe que modela o Escravo1
+ * @Descrição:
+ * Esta classe modela o Escravo1
+ */
+
 package escravo;
 
 import base.Host;

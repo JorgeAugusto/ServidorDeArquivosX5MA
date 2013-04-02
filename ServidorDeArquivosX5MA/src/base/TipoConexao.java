@@ -1,5 +1,5 @@
 package base;
 
-public enum TipoHost {
+public enum TipoConexao {
     SERVIDOR, ESCRAVO, CLIENTE;
 }

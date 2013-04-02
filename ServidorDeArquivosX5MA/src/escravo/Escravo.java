@@ -1,5 +1,5 @@
 /**
- * Classe que modela o Escravo Principal do Sistema
+ * Classe que modela o Escravo
  * @Descrição:
  * Esta classe modela o Escravo Principal do Sistema.
  */
@@ -7,7 +7,7 @@
 package escravo;
 
 import base.Host;
-import base.TipoHost;
+import base.TipoConexao;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -27,21 +27,21 @@ public class Escravo {
          * Cria conexão de controle com o servidor...
          */
         try {
-            new Thread(new ConexaoEscravo(new Socket(Host.SERVIDOR.ip, Host.SERVIDOR.porta), this, TipoHost.SERVIDOR)).start();
+            new Thread(new ConexaoEscravo(new Socket(Host.SERVIDOR.ip, Host.SERVIDOR.porta), this, TipoConexao.ESCRAVO)).start();
         }
         catch(Exception ex) {
-            System.err.println("Erro ao criar nova Thread de conexão do Escravo1, inicialização abortada");
+            System.err.println("Erro ao criar nova Thread de conexão do Escravo, inicialização abortada");
             return;
         }
 
-        System.out.println("Escravo 1 Inciado com sucesso, aguardando conexões de clientes...");
+        System.out.println("Escravo Inciado com sucesso, aguardando conexões de clientes...");
 
         /**
          * Loop infinito que recebe as conexão dos clientes e cria as novas Thread's
          */
         for(;;) {
             try {
-                new Thread(new ConexaoEscravo(socket.accept(), this, TipoHost.CLIENTE)).start();
+                new Thread(new ConexaoEscravo(socket.accept(), this, TipoConexao.CLIENTE)).start();
                 System.out.println("Conexão com cliente estabelecida com sucesso.");
             }
             catch(Exception ex) {

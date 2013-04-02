@@ -12,21 +12,21 @@ import java.util.ArrayList;
 
 public class Servidor {
     private ServerSocket         socket;
-    private ArrayList<Conexao>   listaClientes;
-    private ArrayList<Conexao>   listaEscravos;
+    private ArrayList<ConexaoServidor>   listaClientes;
+    private ArrayList<ConexaoServidor>   listaEscravos;
 
     /**
      * Construtor
      */
     public Servidor() throws Exception {
-        socket            = new ServerSocket(Host.SERVIDOR.porta);
+        socket = new ServerSocket(Host.SERVIDOR.porta);
     }
 
     /**
      * Método principal do Servidor
      */
     public static void main(String[] args) throws Exception {
-        Servidor servidor       = new Servidor();
+        Servidor servidor = new Servidor();
 
         /**
          * Loop infinito que recebe as conexão e cria as novas Thread's
@@ -35,7 +35,7 @@ public class Servidor {
 
         for(;;) {
             try {
-                new Thread(new Conexao(servidor.socket.accept(), servidor)).start();
+                new Thread(new ConexaoServidor(servidor.socket.accept(), servidor)).start();
                 System.out.println("Conexão estabelecida com sucesso.");
             }
             catch(Exception ex) {
