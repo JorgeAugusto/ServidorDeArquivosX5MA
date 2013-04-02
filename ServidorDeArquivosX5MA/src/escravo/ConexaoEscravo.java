@@ -152,6 +152,7 @@ public class ConexaoEscravo implements Runnable {
             // Neste ponto a pasta onde ficam os arquivos compartilhados tem o mesmo nome do escravo
             File    pasta       = new File(escravo.getNome());
 
+            // Monta a lista com os nomes de todos os arquivos...
             listaArquivos.clear();
             for(File arquivo : pasta.listFiles()) {
                 if(arquivo.isFile()) {
