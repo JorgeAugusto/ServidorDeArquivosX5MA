@@ -42,9 +42,14 @@ public class ConexaoEscravo implements Runnable {
 
     @Override
     public void run() {
-        // Se for uma conexão com o servidor então envia identificação
+        /**
+         * Se está conexão foi criada com o servidor então está conexão se "comportará"
+         * como escravo, desta forma envia essa identificação para o servidor
+         * e depois envia a lista arquivos disponíveis para download
+         */
         if(tipoConexao == TipoConexao.ESCRAVO) {
             enviarIdentificacao();
+            enviarListaDeArquivos();
         }
 
         for(;;) {
@@ -130,10 +135,14 @@ public class ConexaoEscravo implements Runnable {
      * Este método envia uma mensagem contendo a lista de arquivos que estão no escravo
      */
     private void enviarListaDeArquivos() {
-        try {
-            mensagemEnviada = new Mensagem(Mensagem.TipoMensagem.LISTA_ARQUIVOS, null);
+        // Monta a lista de arquivos disponíveis neste escravo
+        montarListaArquivos();
 
-            // envia listagem de arquivos...
+        try {
+            // Monta a mensagem
+            mensagemEnviada = new Mensagem(Mensagem.TipoMensagem.LISTA_ARQUIVOS, listaArquivos);
+
+            // envia a mensagem com a listagem dos arquivos
             saida.writeObject(mensagemEnviada);
             saida.flush();
         }
@@ -162,7 +171,7 @@ public class ConexaoEscravo implements Runnable {
             }
         }
         catch(Exception ex) {
-            System.err.println("Erro ao montar listagem dos arquivos do " + escravo.getNome());
+            System.err.println("Erro ao montar listagem dos arquivos");
         }
     }
 
