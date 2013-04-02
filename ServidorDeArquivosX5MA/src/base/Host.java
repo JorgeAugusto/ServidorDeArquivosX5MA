@@ -18,6 +18,17 @@ public class Host implements Serializable {
 
     public Host() { }
 
+    /**
+     * Construtor 1
+     */
+    public Host(int porta) {
+        this("", "", porta);
+    }
+
+
+    /**
+     * Contrutor 2
+     */
     public Host(String nome, String ip, int porta) {
         this.nome   = nome;
         this.ip     = ip;

@@ -6,17 +6,51 @@
 
 package servidor;
 
+import base.Host;
+import java.net.ServerSocket;
+import java.util.ArrayList;
+
 public class Servidor {
-    public int   idConexao = 1;
+    private int               idConexao;    // isso talvez saia...
+    private ServerSocket      socket;
+    private ArrayList<Host>   listaClientes;
+    private ArrayList<Host>   listaEscravos;
+    private Host              host;
+
+    /**
+     * Construtor, recebe um objeto host que contém a porta
+     */
+    public Servidor(Host host) throws Exception {
+        idConexao = 1;
+        this.host = host;
+        socket    = new ServerSocket(host.getPorta());
+    }
 
 
-    // Métodos Estáticos
+    /**
+     * Gera um novo ID de conexão
+     */
     public int getIdConexao() {
         return idConexao++;
     }
 
+    /**
+     * Método principal do Servidor
+     */
+    public static void main(String[] args) throws Exception {
+        Host     host     = new Host(2000);
+        Servidor servidor = new Servidor(host);
 
-    public static void main(String[] args) {
-
+        /**
+         * Loop infinito que recebe as conexão e cria as novas Thread's
+         */
+        for(;;) {
+            try {
+                new Thread(new Conexao(servidor.socket.accept(), servidor)).start();
+            }
+            catch(Exception ex) {
+                System.err.println("Erro ao criar nova Thread de conexão");
+            }
+        }
     }
 }
