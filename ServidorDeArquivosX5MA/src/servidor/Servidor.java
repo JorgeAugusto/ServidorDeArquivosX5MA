@@ -11,7 +11,6 @@ import java.net.ServerSocket;
 import java.util.ArrayList;
 
 public class Servidor {
-    private int                  idConexao;     // isso talvez saia...
     private ServerSocket         socket;
     private ArrayList<Conexao>   listaClientes;
     private ArrayList<Conexao>   listaEscravos;
@@ -20,16 +19,7 @@ public class Servidor {
      * Construtor
      */
     public Servidor() throws Exception {
-        idConexao         = 1;
         socket            = new ServerSocket(Host.SERVIDOR.porta);
-    }
-
-
-    /**
-     * Gera um novo ID de conexão
-     */
-    public int getIdConexao() {
-        return idConexao++;
     }
 
     /**

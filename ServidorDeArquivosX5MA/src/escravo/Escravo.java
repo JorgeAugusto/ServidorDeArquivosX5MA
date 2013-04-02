@@ -1,52 +1,33 @@
 /**
- * Classe que modela o Escravo1 Principal do Sistema
+ * Classe que modela o Escravo Principal do Sistema
  * @Descrição:
- * Esta classe modela o Escravo1 Principal do Sistema.
+ * Esta classe modela o Escravo Principal do Sistema.
  */
 
 package escravo;
 
 import base.Host;
+import base.TipoHost;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 
-public class Escravo1 {
-    private int                         idConexao;    // isso talvez saia...
+public class Escravo {
     private ServerSocket                socket;
     private ArrayList<ConexaoEscravo>   listaClientes;
-    private ArrayList<ConexaoEscravo>   listaEscravos;
 
-    /**
-     * Construtor
-     */
-    public Escravo1() throws Exception {
-        idConexao = 1;
-        socket    = new ServerSocket(Host.ESCRAVO_1.porta);
+    public Escravo(Host hostEscravo) throws Exception {
+        socket = new ServerSocket(hostEscravo.porta);
     }
 
-
-    /**
-     * Gera um novo ID de conexão
-     */
-    public int getIdConexao() {
-        return idConexao++;
-    }
-
-    /**
-     * Método principal do Escravo1
-     */
-    public static void main(String[] args) throws Exception {
-
-        Escravo1 escravo = new Escravo1();
-
+    public void iniciarServico() {
         System.out.println("Iniciando conexão de controle com o servidor...");
 
         /**
          * Cria conexão de controle com o servidor...
          */
         try {
-            new Thread(new ConexaoEscravo(new Socket(Host.SERVIDOR.ip, Host.SERVIDOR.porta), escravo)).start();
+            new Thread(new ConexaoEscravo(new Socket(Host.SERVIDOR.ip, Host.SERVIDOR.porta), this, TipoHost.SERVIDOR)).start();
         }
         catch(Exception ex) {
             System.err.println("Erro ao criar nova Thread de conexão do Escravo1, inicialização abortada");
@@ -60,7 +41,7 @@ public class Escravo1 {
          */
         for(;;) {
             try {
-                new Thread(new ConexaoEscravo(escravo.socket.accept(), escravo)).start();
+                new Thread(new ConexaoEscravo(socket.accept(), this, TipoHost.CLIENTE)).start();
                 System.out.println("Conexão com cliente estabelecida com sucesso.");
             }
             catch(Exception ex) {

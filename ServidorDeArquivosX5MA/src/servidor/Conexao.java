@@ -30,7 +30,6 @@ public class Conexao implements Runnable {
     public Conexao(Socket socket, Servidor servidor) throws Exception {
         this.socket     = socket;
         this.servidor   = servidor;
-        this.id         = servidor.getIdConexao();
         listaArquivos   = new ArrayList<Arquivo>();
 
         // limpa cabeçalho...

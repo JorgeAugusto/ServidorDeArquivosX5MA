@@ -1,9 +1,9 @@
 /**
- * Classe que modela a Conexão de um Escravo1
+ * Classe que modela a Conexão de um Escravo
  * @author: Jorge Augusto C. dos Reis
  * @data..: 19/03/2013 às 07:45
  * @Descrição:
- * Esta classe modela a Conexão do Escravo1 com um Escravo1.
+ * Esta classe modela a Conexão do Escravo com um Escravo.
  */
 
 package escravo;
@@ -20,31 +20,27 @@ public class ConexaoEscravo implements Runnable {
     private Socket                  socket;
     private ObjectInputStream       entrada;
     private ObjectOutputStream      saida;
-    private Escravo1                 escravo;
+    private Escravo                 escravo;
     private int                     id;                 // identificador da conexão.
     private Mensagem                mensagemRecebida;
     private Mensagem                mensagemEnviada;
     private ArrayList<Arquivo>      listaArquivos;
     private TipoHost                tipo;
 
-    public ConexaoEscravo(Socket socket, Escravo1 escravo) throws Exception {
+    public ConexaoEscravo(Socket socket, Escravo escravo, TipoHost tipo) throws Exception {
         this.socket     = socket;
         this.escravo    = escravo;
-        this.id         = escravo.getIdConexao();
+        this.tipo       = tipo;
         listaArquivos   = new ArrayList<Arquivo>();
 
         // limpa cabeçalho...
         saida       = new ObjectOutputStream(socket.getOutputStream());
         saida.flush();
-
         entrada     = new ObjectInputStream(socket.getInputStream());
     }
 
     @Override
     public void run() {
-        solicitarIdentificacao();
-        processarIdentificacao();
-
         for(;;) {
             // Se o socke esta fechado então terminar Thread.
             if(socket.isClosed()) return;
@@ -53,11 +49,11 @@ public class ConexaoEscravo implements Runnable {
                 mensagemRecebida = (Mensagem) entrada.readObject();
                 switch(tipo) {
                     case CLIENTE:
-                        processarMensagensCliente();
+                        processarMensagensClientes();
                     break;
 
-                    case ESCRAVO:
-                        processarMensagensEscravos();
+                    case SERVIDOR:
+                        processarMensagensServidor();
                     break;
                 }
             }
@@ -71,7 +67,7 @@ public class ConexaoEscravo implements Runnable {
     /**
      * Este método processa as mensagens enviadas pelos clientes...
      */
-    public void processarMensagensCliente() {
+    public void processarMensagensClientes() {
         switch(mensagemRecebida.getTipoMensagem()) {
             case LISTA_ARQUIVOS:
             break;
@@ -89,7 +85,7 @@ public class ConexaoEscravo implements Runnable {
     /**
      * Este método processa as mensagens enviadas pelos escravos...
      */
-    public void processarMensagensEscravos() {
+    public void processarMensagensServidor() {
         switch(mensagemRecebida.getTipoMensagem()) {
             case LISTA_ARQUIVOS:
             break;
