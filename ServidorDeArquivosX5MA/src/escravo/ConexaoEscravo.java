@@ -84,7 +84,7 @@ public class ConexaoEscravo implements Runnable {
             break;
 
             case UPLOAD:
-
+                receberArquivo();
             break;
 
             case DOWNLOAD:
@@ -179,7 +179,7 @@ public class ConexaoEscravo implements Runnable {
     }
 
     /**
-     * Este método envia uma arquivo.
+     * Este método envia um arquivo.
      */
     private void enviarArquivo() {
         System.out.println("Iniciando transmissão de arquivo para cliente...");
@@ -207,6 +207,15 @@ public class ConexaoEscravo implements Runnable {
 
         System.out.println("Fim transmissão de arquivo para cliente...");
     }
+
+    /**
+     * Este método recebe um arquivo de um cliente.
+     */
+    private void receberArquivo() {
+
+    }
+
+
 
     /**
      * Este método processa a mensagem de identificação
