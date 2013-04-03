@@ -90,8 +90,12 @@ public class ConexaoDadosCliente implements Runnable {
 
             byte[] b = new byte[ConexaoDadosCliente.TAMANHO_BUFFER];
 
+            int i = 1;
+            janelaCliente.setProgressBarMax((int) arquivoTrans.getTamanho());
             while (entradaArquivoDados.read(b) != -1) {
+                janelaCliente.setProgessBarValor(i);
                 saidaDadosEscravo.write(b);
+                i += b.length;
             }
             saidaDadosEscravo.flush();       // força despejo de algum dado restante
             saidaDadosEscravo.close();       // fecha stream de saída
@@ -102,7 +106,7 @@ public class ConexaoDadosCliente implements Runnable {
             JOptionPane.showMessageDialog(janelaCliente, "Erro ao enviar dados para o cliente.");
         }
 
-        JOptionPane.showMessageDialog(janelaCliente, "Fim da transmissão do arquivo para o escravo");
+        janelaCliente.escreverNaBarraStatus("Arquivo transmitido com sucesso!");
     }
 
     /**
@@ -153,5 +157,7 @@ public class ConexaoDadosCliente implements Runnable {
         catch(Exception ex) {
             JOptionPane.showMessageDialog(janelaCliente, "Erro ao Download o arquivo do servidor: " + ex);
         }
+
+        janelaCliente.escreverNaBarraStatus("Arquivo recebido com sucesso!");
     }
 }

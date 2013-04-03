@@ -423,7 +423,8 @@ public class JanelaCliente extends javax.swing.JFrame {
     private void uploadDeArquivo() {
         JFileChooser janelaAbrirArquivo = new JFileChooser();
         janelaAbrirArquivo.showOpenDialog(this);
-        Arquivo arquivoTrans = new Arquivo(janelaAbrirArquivo.getSelectedFile().getAbsolutePath(), solicitaBalanceamento(), 0);
+        Arquivo arquivoTrans = new Arquivo(janelaAbrirArquivo.getSelectedFile().getAbsolutePath(),
+                                           solicitaBalanceamento(), janelaAbrirArquivo.getSelectedFile().length());
 
         try {
             new Thread(new ConexaoDadosCliente(this, arquivoTrans, Mensagem.TipoMensagem.UPLOAD)).start();

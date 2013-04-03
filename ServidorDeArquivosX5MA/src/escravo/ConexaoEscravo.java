@@ -212,6 +212,7 @@ public class ConexaoEscravo implements Runnable {
      * Este método recebe um arquivo de um cliente.
      */
     private void receberArquivo() {
+        System.out.println("Iniciando recebimento de arquivo para cliente...");
         try {
             Arquivo             arquivoTrans        = (Arquivo) mensagemRecebida.getInfoMensagem();
 
@@ -232,6 +233,8 @@ public class ConexaoEscravo implements Runnable {
         catch(Exception ex) {
             System.err.println("Erro ao Download o arquivo do servidor: " + ex);
         }
+
+        System.out.println("Fim recebimento de arquivo para cliente...");
     }
 
 
