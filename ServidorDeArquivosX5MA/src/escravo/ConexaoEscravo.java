@@ -212,10 +212,41 @@ public class ConexaoEscravo implements Runnable {
      * Este método recebe um arquivo de um cliente.
      */
     private void receberArquivo() {
+        try {
+            Arquivo             arquivoTrans        = (Arquivo) mensagemRecebida.getInfoMensagem();
 
+            FileInputStream     entradaDados        = (FileInputStream) socket.getInputStream();
+            File                novoArquivo         = new File(arquivoTrans.getHost().toString() + "\\" + extraNomeSimples(arquivoTrans.getNome()));
+            FileOutputStream    saidaNovoArquivo    = new FileOutputStream(novoArquivo);
+
+            byte[] b = new byte[ConexaoDadosCliente.TAMANHO_BUFFER];
+
+            while(entradaDados.read(b) != -1) {
+                saidaNovoArquivo.write(b);
+            }
+
+            saidaNovoArquivo.close();   // fecha arquivo
+            entradaDados.close();       // fecha stream de entrada
+            socket.close();             // fecha socket
+        }
+        catch(Exception ex) {
+            System.err.println("Erro ao Download o arquivo do servidor: " + ex);
+        }
     }
 
 
+    /**
+     * Este método extrai o nome simples do arquivo, (somente o nome), por que é enviado o nome completo (com caminho)
+     */
+    private String extraNomeSimples(String nomeCompleto) {
+        String nomeSimples = new String();
+        int i = nomeCompleto.lastIndexOf("\\");
+        nomeSimples = nomeCompleto.substring(i + 1);
+
+        System.out.println("Nome simples: " + nomeSimples);
+
+        return nomeSimples;
+    }
 
     /**
      * Este método processa a mensagem de identificação

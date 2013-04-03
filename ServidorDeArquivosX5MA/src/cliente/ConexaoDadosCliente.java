@@ -69,14 +69,40 @@ public class ConexaoDadosCliente implements Runnable {
      * Este método envia uma solicitação de Upload de arquivo...
      */
     private void solicitarUpload() {
-
+        try {
+            mensagemEnviada = new Mensagem(Mensagem.TipoMensagem.UPLOAD, arquivoTrans);
+            saida.writeObject(mensagemEnviada);
+            saida.flush();
+        }
+        catch(Exception ex) {
+            JOptionPane.showMessageDialog(janelaCliente, "Erro ao solicitar Upload.");
+        }
     }
 
     /**
      * Este método realiza o download de uma arquivo... (de fato)
      */
     private void UploadDeArquivo() {
+        try {
+            File                arquivoDados        = new File(arquivoTrans.getNome());
+            FileInputStream     entradaArquivoDados = new FileInputStream(arquivoDados);
+            FileOutputStream    saidaDadosEscravo   = (FileOutputStream) socket.getOutputStream();
 
+            byte[] b = new byte[ConexaoDadosCliente.TAMANHO_BUFFER];
+
+            while (entradaArquivoDados.read(b) != -1) {
+                saidaDadosEscravo.write(b);
+            }
+            saidaDadosEscravo.flush();       // força despejo de algum dado restante
+            saidaDadosEscravo.close();       // fecha stream de saída
+            entradaArquivoDados.close();     // fecha arquivo de entrada
+            //socket.close();                // fecha o socket
+        }
+        catch (Exception ex) {
+            JOptionPane.showMessageDialog(janelaCliente, "Erro ao enviar dados para o cliente.");
+        }
+
+        JOptionPane.showMessageDialog(janelaCliente, "Fim da transmissão do arquivo para o escravo");
     }
 
     /**
@@ -97,7 +123,7 @@ public class ConexaoDadosCliente implements Runnable {
             saida.flush();
         }
         catch(Exception ex) {
-            JOptionPane.showMessageDialog(janelaCliente, "Erro ao solicitar Download...");
+            JOptionPane.showMessageDialog(janelaCliente, "Erro ao solicitar Download.");
         }
     }
 

@@ -162,6 +162,9 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Upload"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonUpActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jButtonDown">
       <Properties>

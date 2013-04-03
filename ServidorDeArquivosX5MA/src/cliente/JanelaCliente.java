@@ -10,10 +10,12 @@
 package cliente;
 
 import base.Arquivo;
+import base.Host;
 import base.Mensagem;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -93,6 +95,11 @@ public class JanelaCliente extends javax.swing.JFrame {
         jLabelMsgListaArquivos.setText("Lista de Arquivos Disponíveis - No Servidor Principal");
 
         jButtonUp.setText("Upload");
+        jButtonUp.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonUpActionPerformed(evt);
+            }
+        });
 
         jButtonDown.setText("Download");
         jButtonDown.addActionListener(new java.awt.event.ActionListener() {
@@ -219,6 +226,10 @@ public class JanelaCliente extends javax.swing.JFrame {
     private void windowOpenedActionPerformed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_windowOpenedActionPerformed
         inicializacao();
     }//GEN-LAST:event_windowOpenedActionPerformed
+
+    private void jButtonUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUpActionPerformed
+        uploadDeArquivo();
+    }//GEN-LAST:event_jButtonUpActionPerformed
 
     // Método principal da Janela
     public static void main(String args[]) {
@@ -402,8 +413,32 @@ public class JanelaCliente extends javax.swing.JFrame {
             new Thread(new ConexaoDadosCliente(this, getArquivoSelecionado(), Mensagem.TipoMensagem.DOWNLOAD)).start();
         }
         catch(Exception ex) {
-            escreverNaBarraStatus("Erro ao criar conexão de dados...");
+            escreverNaBarraStatus("Erro ao criar conexão de dados para DOWNLOAD.");
         }
+    }
+
+    /**
+     * Este método cria uma nova Thread que é responsável por fazer o Upload do arquivo.
+     */
+    private void uploadDeArquivo() {
+        JFileChooser janelaAbrirArquivo = new JFileChooser();
+        janelaAbrirArquivo.showOpenDialog(this);
+        Arquivo arquivoTrans = new Arquivo(janelaAbrirArquivo.getSelectedFile().getAbsolutePath(), solicitaBalanceamento(), 0);
+
+        try {
+            new Thread(new ConexaoDadosCliente(this, arquivoTrans, Mensagem.TipoMensagem.UPLOAD)).start();
+        }
+        catch(Exception ex) {
+            escreverNaBarraStatus("Erro ao criar conexão de dados para UPLOAD.");
+        }
+    }
+
+    /**
+     * Este método que é responsável pelo balanceamento...
+     * No momento tudo vai para o escravo 1, mas isso já já vai mudar...
+     */
+    private Host solicitaBalanceamento() {
+        return Host.ESCRAVO_1;
     }
 
 //    /**
