@@ -9,20 +9,16 @@ package servidor;
 import base.Arquivo;
 import base.Mensagem;
 import base.TipoConexao;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class ConexaoServidor implements Runnable {
     private Socket                  socket;
     private ObjectInputStream       entrada;
     private ObjectOutputStream      saida;
     private Servidor                servidor;
-    private int                     id;                 // identificador da conexão.
     private Mensagem                mensagemRecebida;
     private Mensagem                mensagemEnviada;
     private ArrayList<Arquivo>      listaArquivos;
@@ -36,7 +32,6 @@ public class ConexaoServidor implements Runnable {
         // limpa cabeçalho...
         saida       = new ObjectOutputStream(socket.getOutputStream());
         saida.flush();
-
         entrada     = new ObjectInputStream(socket.getInputStream());
     }
 
@@ -44,7 +39,7 @@ public class ConexaoServidor implements Runnable {
     public void run() {
         /**
          * Isto é possível pois a primeira ação de uma nova conexão é enviar
-         * uma mensagem idenfiticando do tipoConexao de host
+         * uma mensagem idenfiticando o tipoConexao de host
          */
         processarIdentificacao();
 
@@ -77,6 +72,7 @@ public class ConexaoServidor implements Runnable {
     public void processarMensagensCliente() {
         switch(mensagemRecebida.getTipoMensagem()) {
             case LISTA_ARQUIVOS:
+
             break;
 
             case UPLOAD:
@@ -95,6 +91,7 @@ public class ConexaoServidor implements Runnable {
     public void processarMensagensEscravos() {
         switch(mensagemRecebida.getTipoMensagem()) {
             case LISTA_ARQUIVOS:
+                processarListaArquivoDeEscravo();
             break;
 
             case UPLOAD:
@@ -112,8 +109,15 @@ public class ConexaoServidor implements Runnable {
      */
     public void processarIdentificacao() {
         try {
-            mensagemRecebida = (Mensagem) entrada.readObject();
-            tipoConexao = (TipoConexao) mensagemRecebida.getInfoMensagem();
+            mensagemRecebida    = (Mensagem) entrada.readObject();                      // lê a mensagem
+            tipoConexao         = (TipoConexao) mensagemRecebida.getInfoMensagem();     // pega a informação
+
+            if(tipoConexao == TipoConexao.ESCRAVO) {
+                servidor.getListaEscravos().add(this);
+            }
+            else if(tipoConexao == TipoConexao.CLIENTE) {
+                servidor.getListaClientes().add(this);
+            }
         }
         catch(Exception ex) {
             System.err.println("Erro ao processar mensagem de identificação");
@@ -123,47 +127,21 @@ public class ConexaoServidor implements Runnable {
         System.out.println("Mensagem de Identificação processada com sucesso: " + tipoConexao.toString());
     }
 
-    // Métodos privados
     /**
-     * Este método envia ao servidor escravo uma solicitação para que mesmo
-     * envie uma lista contento os nomes dos arquivos que estão disponíveis
+     * Este método processa a mensagemRecebida contendo uma lista de arquivos de um escravo
      */
-    private synchronized void solicitarListaArquivos() {
-//        try {
-//            mensagemEnviada = new Mensagem(Mensagem.TipoMensagem.LISTA_ARQUIVOS, null);
-//
-//            saida.writeObject(mensagemEnviada);
-//            saida.flush();
-//        }
-//        catch(Exception ex) {
-//            System.err.println("Erro ao enviar solicitação de listagem de arquivos...");
-//        }
-//
-//        System.out.println("Enviando solicitação de lista de arquivos. OK");
-    }
+    private void processarListaArquivoDeEscravo() {
+        listaArquivos = (ArrayList<Arquivo>) mensagemRecebida.getInfoMensagem();
+        servidor.atualizarListaArquivos();
 
-    /**
-     * Este método processa a mensagemRecebida de recebimento de uma lista de arquivos
-     */
-    private synchronized void processarListaArquivo() {
-//        ArrayList<InfoArquivo> listaArquivosEscravo = (ArrayList<InfoArquivo>) mensagemRecebida.getInfoMensagem();
-//        ArrayList<InfoArquivo> listaArquivosTemp = new ArrayList<InfoArquivo>();
-//
-//        for(InfoArquivo arquivo : listaArquivosEscravo) {
-//            listaArquivosTemp.add(
-//            new InfoArquivo(arquivo.getNome(), new InfoServidor(getNome(), getIP(), arquivo.getServEscravo().getPorta()), arquivo.getTamanho() ));
-//        }
-//
-//        listaArquivos = listaArquivosTemp;
-//        servidor.getGerenteConexaoEscravos().processaListaArquivos();
-//        janelaServidor.adicionarHistorico("Processsando lista de arquivos de " + getNome() , EstadoSistema.OK);
+        System.out.println("Lista de arquivos recebida e processada com sucesso.");
     }
 
     /**
      * Este método envia uma mensagem em Broadcast, ou seja, para todos os
      * Servidores Escravos conectados
      */
-    private synchronized boolean enviarBroadCast() {
+    private boolean enviarBroadCast() {
 //        janelaServidor.adicionarHistorico("Enviando solicitação de lista de arquivos em Broadcast...", EstadoSistema.PROCESSANDO);
 //        if(!servidor.getGerenteConexaoEscravos().temEscravoConectado()) {
 //            janelaServidor.adicionarHistorico("Broadcast falhou não há Servidores Escravos conectados", EstadoSistema.ERRO);
@@ -190,7 +168,7 @@ public class ConexaoServidor implements Runnable {
     }
 
     /**
-     * Retorna lista de arquivos deste escravo...
+     * Retorna lista de arquivos deste escravo.
      */
     public ArrayList<Arquivo> getListaArquivo() {
         return listaArquivos;

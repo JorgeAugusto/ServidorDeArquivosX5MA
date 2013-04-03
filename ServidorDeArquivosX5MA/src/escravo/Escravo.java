@@ -16,10 +16,29 @@ public class Escravo {
     private ServerSocket                socket;
     private ArrayList<ConexaoEscravo>   listaClientes;
     private String                      nome;
+    private Host                        hostEscravo;
 
     public Escravo(Host hostEscravo) throws Exception {
+        // Isto pode sofrer alguma mudaça.
+        this.hostEscravo = hostEscravo;
         this.nome = hostEscravo.toString();
+
         socket = new ServerSocket(hostEscravo.porta);
+    }
+
+
+    /**
+     * Retorna informação do host
+     */
+    public Host getHost() {
+        return hostEscravo;
+    }
+
+    /**
+     * Retorna o nome do escravo como uma string
+     */
+    public String getNome() {
+       return nome;
     }
 
     public void iniciarServico() {
