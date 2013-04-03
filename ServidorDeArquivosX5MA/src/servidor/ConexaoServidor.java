@@ -72,7 +72,7 @@ public class ConexaoServidor implements Runnable {
     public void processarMensagensCliente() {
         switch(mensagemRecebida.getTipoMensagem()) {
             case LISTA_ARQUIVOS:
-
+                enviarListaDeArquivos();
             break;
 
             case UPLOAD:
@@ -135,6 +135,26 @@ public class ConexaoServidor implements Runnable {
         servidor.atualizarListaArquivos();
 
         System.out.println("Lista de arquivos recebida e processada com sucesso.");
+    }
+
+    /**
+     * Este método envia uma mensagem contendo a lista de arquivos que estão no servidor para um cliente
+     */
+    private void enviarListaDeArquivos() {
+        try {
+            // Monta a mensagem
+            mensagemEnviada = new Mensagem(Mensagem.TipoMensagem.LISTA_ARQUIVOS, servidor.getListaArquivos());
+
+            // envia a mensagem com a listagem dos arquivos
+            saida.writeObject(mensagemEnviada);
+            saida.flush();
+        }
+        catch(Exception ex) {
+            System.err.println("Erro ao enviar lista de arquivos para o cliente");
+            return;
+        }
+
+        System.out.println("Lista de arquivos enviada para o cliente com sucesso.");
     }
 
     /**

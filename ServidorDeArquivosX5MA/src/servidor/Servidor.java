@@ -68,6 +68,13 @@ public class Servidor {
     }
 
     /**
+     * Returna a lista de arquivos.
+     */
+    public ArrayList<Arquivo> getListaArquivos() {
+        return listaArquivos;
+    }
+
+    /**
      * Método principal do Servidor
      */
     public static void main(String[] args) throws Exception {

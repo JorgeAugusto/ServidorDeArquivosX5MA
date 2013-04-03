@@ -118,7 +118,7 @@ public class ConexaoEscravo implements Runnable {
         try {
             mensagemEnviada = new Mensagem(Mensagem.TipoMensagem.IDENTIFICACAO, tipoConexao);
 
-            // envia listagem de arquivos...
+            // envia mensagem
             saida.writeObject(mensagemEnviada);
             saida.flush();
         }

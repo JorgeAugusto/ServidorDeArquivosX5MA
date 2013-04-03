@@ -279,7 +279,8 @@ public class JanelaCliente extends javax.swing.JFrame {
      */
     private void inicializacao() {
         try {
-            conexaoControle = new ConexaoControle(this);
+            conexaoControle = new ConexaoControle(this);    // cria conexão de controle
+            new Thread(conexaoControle).start();            // cria a nova Thread
         }
         catch(Exception ex) {
             escreverNaBarraStatus("Erro ao criar conexão de controle com o servidor.");

@@ -9,10 +9,12 @@ package cliente;
 import base.Arquivo;
 import base.Host;
 import base.Mensagem;
+import base.TipoConexao;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 public class ConexaoControle implements Runnable {
     private Socket                  socket;
@@ -22,12 +24,15 @@ public class ConexaoControle implements Runnable {
     private Mensagem                mensagemEnviada;
     private JanelaCliente           janelaCliente;
     private ArrayList<Arquivo>      listaArquivos;
+    private TipoConexao             tipoConexao;
 
     /**
      * Construtor
      */
     public ConexaoControle(JanelaCliente janelaCliente) throws Exception {
+        listaArquivos       = new ArrayList<Arquivo>();
         this.janelaCliente  = janelaCliente;
+        tipoConexao         = TipoConexao.CLIENTE;
         socket              = new Socket(Host.SERVIDOR.ip, Host.SERVIDOR.porta);
         saida               = new ObjectOutputStream(socket.getOutputStream());
         saida.flush();
@@ -47,9 +52,8 @@ public class ConexaoControle implements Runnable {
      */
     @Override
     public void run() {
-
-        // Envia mensagem solicitando lista de arquivos...
-        solicitarListaArquivos();
+        enviarIdentificacao();      // se identifica
+        solicitarListaArquivos();   // solicita lista de arquivos
 
         for(;;) {
             // Se o socke esta fechado então terminar Thread.
@@ -69,6 +73,26 @@ public class ConexaoControle implements Runnable {
             }
         }
     }
+
+    /**
+     * Este método envia uma mensagem informando o tipoConexao de conexão desta Thread
+     */
+    public void enviarIdentificacao() {
+        try {
+            mensagemEnviada = new Mensagem(Mensagem.TipoMensagem.IDENTIFICACAO, tipoConexao);
+
+            // envia mensagem
+            saida.writeObject(mensagemEnviada);
+            saida.flush();
+        }
+        catch(Exception ex) {
+            System.err.println("Erro ao enviar mensagem de identificação");
+            return;
+        }
+
+        System.out.println("Identificação enviada com sucesso.");
+    }
+
 
     // Métodos privados
     /**
