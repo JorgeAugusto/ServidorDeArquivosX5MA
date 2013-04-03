@@ -237,36 +237,6 @@ public class ConexaoEscravo implements Runnable {
     }
 
     /**
-     * Este método envia uma mensagem em Broadcast, ou seja, para todos os
-     * Servidores Escravos conectados
-     */
-    private synchronized boolean enviarBroadCast() {
-//        janelaServidor.adicionarHistorico("Enviando solicitação de lista de arquivos em Broadcast...", EstadoSistema.PROCESSANDO);
-//        if(!servidor.getGerenteConexaoEscravos().temEscravoConectado()) {
-//            janelaServidor.adicionarHistorico("Broadcast falhou não há Servidores Escravos conectados", EstadoSistema.ERRO);
-//            return false;
-//        }
-//
-//        try{
-//            ArrayList<Conexao> listaEscravos = servidor.getGerenteConexaoEscravos().getListaEscravos();
-//
-//            for(ConexaoEscravo conEscravo : listaEscravos) {
-//                // Se esta desconectado passa para o próximo
-//                if(conEscravo.getEstado() == EstadoEscravo.DESCONECTADO) continue;
-//
-//                conEscravo.solicitarListaArquivos();
-//            }
-//        }
-//        catch(Exception ex) {
-//            janelaServidor.adicionarHistorico("Enviando Broadcast", EstadoSistema.ERRO);
-//        }
-//
-//        janelaServidor.adicionarHistorico("Enviando solicitação de lista de arquivos em Broadcast", EstadoSistema.OK);
-
-        return true;
-    }
-
-    /**
      * Retorna lista de arquivos deste escravo...
      */
     public ArrayList<Arquivo> getListaArquivo() {

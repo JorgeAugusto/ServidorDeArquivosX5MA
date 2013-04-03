@@ -12,9 +12,7 @@ package cliente;
 import base.Arquivo;
 import base.Host;
 import base.Mensagem;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
+import java.util.Random;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -241,9 +239,6 @@ public class JanelaCliente extends javax.swing.JFrame {
                 JanelaCliente cliente = new JanelaCliente();
 
                 cliente.setVisible(true);
-                cliente.iniciarComunicao();
-
-                // cliente.atualizarTabelaArquivos();
             }
         });
     }
@@ -297,15 +292,6 @@ public class JanelaCliente extends javax.swing.JFrame {
         }
     }
 
-    /**
-     * Este método abri a janela de configuração de conexão com o servidor
-     */
-    private void abrirJanelaConfigConServidor() {
-//        janConfiConServidor = new JanelaConfigConServidorCli(this, true);
-//
-//        janConfiConServidor.setVisible(true);
-    }
-
     // Método que exibe a mensagem do Sobre
     private void exibirSobre() {
         JOptionPane.showMessageDialog(rootPane,
@@ -322,52 +308,12 @@ public class JanelaCliente extends javax.swing.JFrame {
         dispose();
     }
 
-
-    // Este método, cria o socket do cliente e inicia a comunicação com co servidor
-    private void iniciarComunicao() {
-        try {
-//            // Conecto ao servidor
-//            socketCliente = new Socket(InfoServidorPrincipal.SERVIDOR_PRINCIPAL.ip,
-//                                                InfoServidorPrincipal.SERVIDOR_PRINCIPAL.porta);
-        }
-        catch(Exception ex) {
-            jLabelBarraStatus.setText("Erro em inciar comunicação com o Servidor: " + ex);
-        }
-    }
-
-
-
     /**
      * Este método escreve uma mensagem na barra de status
      */
     public void escreverNaBarraStatus(String mensagens) {
         jLabelBarraStatus.setText(mensagens);
     }
-
-//    // Este método envia uma solicitação ao servidor...
-//    private void enviaSolicitacao(TipoSolicitacao solicitacao) {
-//        try {
-//            saida = new ObjectOutputStream(socketCliente.getOutputStream());
-//            saida.writeObject(solicitacao);
-//        }
-//        catch(Exception ex) {
-//            jLabelBarraStatus.setText("Erro ao enviar solicitação: " + ex);
-//        }
-//    }
-
-//    // Envia uma solicitação de listagem de arquivos...
-//    // E lê a resposta do mesmo...
-//    private void solicitaListaArquivos() {
-//        enviaSolicitacao(TipoSolicitacao.LISTAGEM_ARQUIVOS);
-//
-//        try {
-//            entrada  = new ObjectInputStream(socketCliente.getInputStream());
-//            listaDeArquivos          = (ArrayList<InfoDeArquivo>) entrada.readObject();
-//        }
-//        catch(Exception ex) {
-//            jLabelBarraStatus.setText("Ao receber resposta da listagem dos arquivos: " + ex);
-//        }
-//    }
 
     /**
      * Este método preenche a JTable com os dados dos arquivos
@@ -436,45 +382,24 @@ public class JanelaCliente extends javax.swing.JFrame {
 
     /**
      * Este método que é responsável pelo balanceamento...
-     * No momento tudo vai para o escravo 1, mas isso já já vai mudar...
+     * @Nota: No momento o balanceamento é "randômico" - aleatório
+     * mas isso vai ser mudado para uma consulta ao servidor...
      */
     private Host solicitaBalanceamento() {
-        return Host.ESCRAVO_1;
-    }
+        Random radomizador = new Random();
+        Host   escravo     = Host.ESCRAVO_1;
+        int    n           = radomizador.nextInt(2);
 
-//    /**
-//     * Retorna o atribudo escravo
-//     */
-//    public Cliente getCliente() {
-//        return cliente;
-//    }
-//
-//    public JanelaDownload getJanelaDownload() {
-//        return janelaDownload;
-//    }
+        if(n == 0) escravo      = Host.ESCRAVO_1;
+        else if(n == 1) escravo = Host.ESCRAVO_2;
+
+        return escravo;
+    }
 
     /**
      * Declaração dos meus atributos.
      */
     ConexaoControleCliente conexaoControle;
-
-
-
-
-    //private JanelaConfigConServidorCli  janConfiConServidor;
-    // private Cliente                     cliente;
-    //private JanelaDownload              janelaDownload;
-
-    /// ANTIGAMENTE...
-
-    // Socket para conexão de controle...
-    private Socket                      socketCliente;
-    private ObjectInputStream           entrada;
-    private ObjectOutputStream          saida;
-//
-//    private ArrayList<InfoDeArquivo>    listaDeArquivos = new ArrayList<InfoDeArquivo>();
-//    private JanelaDownload              janDownload;
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonDown;

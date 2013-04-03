@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class Mensagem implements Serializable {
     // Enum Interna
     public enum TipoMensagem {
-        IDENTIFICACAO, LISTA_ARQUIVOS, UPLOAD, DOWNLOAD;
+        IDENTIFICACAO, LISTA_ARQUIVOS, UPLOAD, DOWNLOAD, BALANCEAMENTO;
     }
 
     private TipoMensagem    tipoRequisicao;

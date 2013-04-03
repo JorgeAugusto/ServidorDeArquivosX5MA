@@ -65,7 +65,6 @@ public class ConexaoServidor implements Runnable {
         }
     }
 
-
     /**
      * Este método processa as mensagens enviadas pelos clientes...
      */
@@ -92,14 +91,6 @@ public class ConexaoServidor implements Runnable {
         switch(mensagemRecebida.getTipoMensagem()) {
             case LISTA_ARQUIVOS:
                 processarListaArquivoDeEscravo();
-            break;
-
-            case UPLOAD:
-
-            break;
-
-            case DOWNLOAD:
-
             break;
         }
     }
