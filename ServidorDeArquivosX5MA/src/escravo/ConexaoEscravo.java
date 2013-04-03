@@ -9,11 +9,10 @@ package escravo;
 import base.Arquivo;
 import base.Mensagem;
 import base.TipoConexao;
-import java.io.File;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 public class ConexaoEscravo implements Runnable {
     private Socket                  socket;
@@ -81,7 +80,7 @@ public class ConexaoEscravo implements Runnable {
     public void processarMensagensClientes() {
         switch(mensagemRecebida.getTipoMensagem()) {
             case LISTA_ARQUIVOS:
-                
+
             break;
 
             case UPLOAD:
@@ -89,7 +88,7 @@ public class ConexaoEscravo implements Runnable {
             break;
 
             case DOWNLOAD:
-
+                enviarArquivo();
             break;
         }
     }
@@ -100,6 +99,7 @@ public class ConexaoEscravo implements Runnable {
     public void processarMensagensServidor() {
         switch(mensagemRecebida.getTipoMensagem()) {
             case LISTA_ARQUIVOS:
+
             break;
 
             case UPLOAD:
@@ -176,6 +176,36 @@ public class ConexaoEscravo implements Runnable {
         catch(Exception ex) {
             System.err.println("Erro ao montar listagem dos arquivos");
         }
+    }
+
+    /**
+     * Este método envia uma arquivo.
+     */
+    private void enviarArquivo() {
+        System.out.println("Iniciando transmissão de arquivo para cliente...");
+
+        try {
+            Arquivo             arquivoTrans        = (Arquivo) mensagemRecebida.getInfoMensagem();
+            // Neste ponto o nome da basta é o mesmo nome do escravo
+            File                arquivoDados        = new File(escravo.getNome() + "\\" + arquivoTrans.getNome());
+            FileInputStream     entradaArquivoDados = new FileInputStream(arquivoDados);
+            FileOutputStream    saidaDadosCliente   = (FileOutputStream) socket.getOutputStream();
+
+            byte[] b = new byte[1];
+
+            while (entradaArquivoDados.read(b) != -1) {
+                saidaDadosCliente.write(b);
+            }
+            //saidaDadosCliente.flush();       // força despejo de algum dado restante
+            //saidaDadosCliente.close();       // fecha stream de saída
+            //entradaArquivoDados.close();     // fecha arquivo de entrada
+            // socket.close();                  // fecha o socket
+        }
+        catch (Exception ex) {
+            System.err.println("Erro ao enviar dados para o cliente.");
+        }
+
+        System.out.println("Fim transmissão de arquivo para cliente...");
     }
 
     /**

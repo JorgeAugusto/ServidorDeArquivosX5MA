@@ -82,7 +82,7 @@
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jButtonDown" min="-2" pref="98" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="jProgressBar1" min="-2" pref="162" max="-2" attributes="0"/>
+                              <Component id="jProgressBar" min="-2" pref="162" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="jButtonFechar" min="-2" pref="98" max="-2" attributes="0"/>
                           </Group>
@@ -104,12 +104,10 @@
               <Component id="jScrollPaneTabela" min="-2" pref="224" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                  <Group type="103" alignment="0" groupAlignment="3" attributes="0">
-                      <Component id="jButtonUp" max="32767" attributes="0"/>
-                      <Component id="jButtonDown" alignment="0" max="32767" attributes="0"/>
-                  </Group>
+                  <Component id="jButtonDown" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jButtonUp" min="-2" max="-2" attributes="0"/>
                   <Component id="jButtonFechar" max="32767" attributes="0"/>
-                  <Component id="jProgressBar1" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jProgressBar" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace pref="29" max="32767" attributes="0"/>
               <Component id="jPanelBarraStatus" min="-2" pref="30" max="-2" attributes="0"/>
@@ -215,7 +213,7 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JProgressBar" name="jProgressBar1">
+    <Component class="javax.swing.JProgressBar" name="jProgressBar">
     </Component>
   </SubComponents>
 </Form>

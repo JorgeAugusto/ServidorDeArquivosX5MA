@@ -7,22 +7,23 @@
 package cliente;
 
 import base.Arquivo;
-import base.Host;
 import base.Mensagem;
 import base.TipoConexao;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.ArrayList;
 import javax.swing.JOptionPane;
 
 public class ConexaoDados implements Runnable {
+    // Constantes
+    private static final String     PASTA_DOWNLOADS = "Downloads";
+
     private Socket                  socket;
     private ObjectOutputStream      saida;          // para enviar mensagem de UP ou DOWN
-    private DataInputStream         entradaDados;
-    private DataOutputStream        saidaDados;
+    private ObjectInputStream       entrada;
     private Mensagem                mensagemEnviada;
     private JanelaCliente           janelaCliente;
     private Arquivo                 arquivoTrans;   // dados do arquivos a ser transmitido (UP ou DOWN)
@@ -40,6 +41,7 @@ public class ConexaoDados implements Runnable {
         socket              = new Socket(arquivoTrans.getHost().ip, arquivoTrans.getHost().porta);
         saida               = new ObjectOutputStream(socket.getOutputStream());
         saida.flush();
+        entrada             = new ObjectInputStream(socket.getInputStream());
     }
 
     /**
@@ -48,7 +50,7 @@ public class ConexaoDados implements Runnable {
      */
     @Override
     public void run() {
-        JOptionPane.showMessageDialog(janelaCliente, "Entrou na Thread de Dados...");
+        // JOptionPane.showMessageDialog(janelaCliente, "Entrou na Thread de Dados...");
 
         if(tipoMensagem == Mensagem.TipoMensagem.UPLOAD) {
             processarUpload();
@@ -92,14 +94,41 @@ public class ConexaoDados implements Runnable {
      * Este método envia uma solicitação de Download de arquivo...
      */
     private void solicitarDownload(){
-
+        try {
+            mensagemEnviada = new Mensagem(Mensagem.TipoMensagem.DOWNLOAD, arquivoTrans);
+            saida.writeObject(mensagemEnviada);
+            saida.flush();
+        }
+        catch(Exception ex) {
+            JOptionPane.showMessageDialog(janelaCliente, "Erro ao solicitar Download...");
+        }
     }
-
 
     /**
      * Este método realiza o download de uma arquivo... (de fato)
      */
     private void downloadDeArquivo() {
+        try {
+            FileInputStream     entradaDados        = (FileInputStream) socket.getInputStream();
+            File                novoArquivo         = new File(PASTA_DOWNLOADS + "\\" + arquivoTrans.getNome());
+            FileOutputStream    saidaNovoArquivo    = new FileOutputStream(novoArquivo);
 
+            byte[] b = new byte[1];  // 4 KB de buffer
+
+            janelaCliente.setProgressBarMax((int) arquivoTrans.getTamanho());
+            int i = 1;
+            while(entradaDados.read(b) != -1) {
+                janelaCliente.setProgessBarValor(i);
+                saidaNovoArquivo.write(b);
+                i += b.length;
+            }
+
+            //saidaNovoArquivo.close();   // fecha arquivo
+            //entradaDados.close();       // fecha stream de entrada
+            //socket.close();             // fecha socket
+        }
+        catch(Exception ex) {
+            JOptionPane.showMessageDialog(janelaCliente, "Erro ao Download o arquivo do servidor: " + ex);
+        }
     }
 }

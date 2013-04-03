@@ -48,7 +48,7 @@ public class JanelaCliente extends javax.swing.JFrame {
         jPanelBarraStatus = new javax.swing.JPanel();
         jSeparator = new javax.swing.JSeparator();
         jLabelBarraStatus = new javax.swing.JLabel();
-        jProgressBar1 = new javax.swing.JProgressBar();
+        jProgressBar = new javax.swing.JProgressBar();
         jMenuBar = new javax.swing.JMenuBar();
         jMenuArquivo = new javax.swing.JMenu();
         jMenuItemSair = new javax.swing.JMenuItem();
@@ -172,7 +172,7 @@ public class JanelaCliente extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButtonDown, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(jButtonFechar, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jLabelMsgListaArquivos)
@@ -188,11 +188,10 @@ public class JanelaCliente extends javax.swing.JFrame {
                 .addComponent(jScrollPaneTabela, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButtonUp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButtonDown, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jButtonDown, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButtonUp)
                     .addComponent(jButtonFechar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jProgressBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addComponent(jPanelBarraStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -382,6 +381,20 @@ public class JanelaCliente extends javax.swing.JFrame {
     }
 
     /**
+     * Configura o tamanho máximo do progress bar
+     */
+    public void setProgressBarMax(int valor) {
+        jProgressBar.setMaximum(valor);
+    }
+
+    /**
+     * Configura o valor do progress bar
+     */
+    public void setProgessBarValor(int valor) {
+        jProgressBar.setValue(valor);
+    }
+
+    /**
      * Este método cria uma nova Thread que é responsável por fazer o Download do arquivo.
      */
     private void downloadDeArquivo() {
@@ -391,15 +404,6 @@ public class JanelaCliente extends javax.swing.JFrame {
         catch(Exception ex) {
             escreverNaBarraStatus("Erro ao criar conexão de dados...");
         }
-    }
-
-    // Este método retorna o arquivo selecionado
-    public Arquivo getInfoDeArquivo() {
-//        DefaultTableModel modelo = (DefaultTableModel) jTableArquivos.getModel();
-//
-//        return cliente.getListaArquivo().get(jTableArquivos.getSelectedRow());
-
-        return null;
     }
 
 //    /**
@@ -448,7 +452,7 @@ public class JanelaCliente extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuItemSair;
     private javax.swing.JMenuItem jMenuItemSobre;
     private javax.swing.JPanel jPanelBarraStatus;
-    private javax.swing.JProgressBar jProgressBar1;
+    private javax.swing.JProgressBar jProgressBar;
     private javax.swing.JScrollPane jScrollPaneTabela;
     private javax.swing.JSeparator jSeparator;
     private javax.swing.JTable jTableArquivos;
