@@ -115,4 +115,10 @@ public class ConexaoControleCliente implements Runnable {
         listaArquivos = (ArrayList<Arquivo>) mensagemRecebida.getInfoMensagem();
         janelaCliente.atualizarTabelaArquivos();
     }
+
+    public Host processarBalanceamento() {
+        
+
+        return null;
+    }
 }
