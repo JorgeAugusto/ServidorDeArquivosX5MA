@@ -117,5 +117,6 @@ public class ConexaoControle implements Runnable {
     private void processarListaArquivos() {
         listaArquivos = (ArrayList<Arquivo>) mensagemRecebida.getInfoMensagem();
         janelaCliente.atualizarTabelaArquivos();
+        
     }
 }
