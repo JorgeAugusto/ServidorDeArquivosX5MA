@@ -81,7 +81,7 @@ public class Servidor {
         Servidor servidor = new Servidor();
 
         /**
-         * Loop infinito que recebe as conexão e cria as novas Thread's
+         * Loop infinito que recebe as conexão e cria as novas Thread's (para clientes e escravos)
          */
         System.out.println("Servidor Inciado com sucesso, aguardando conexões...");
 
