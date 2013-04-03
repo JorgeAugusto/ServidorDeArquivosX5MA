@@ -227,12 +227,8 @@ public class ConexaoEscravo implements Runnable {
      * Este método extrai o nome simples do arquivo, (somente o nome), por que é enviado o nome completo (com caminho)
      */
     private String extraNomeSimples(String nomeCompleto) {
-        String nomeSimples = new String();
         int i = nomeCompleto.lastIndexOf("\\");
-        nomeSimples = nomeCompleto.substring(i + 1);
-
-        System.out.println("Nome simples: " + nomeSimples);
-
+        String nomeSimples = nomeCompleto.substring(i + 1);
         return nomeSimples;
     }
 

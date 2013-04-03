@@ -1,6 +1,5 @@
 /**
- * Enum com as configurações de conexão
- * @author Jorge Augusto C. dos Reis
+ * Enum com as configurações de conexão.
  */
 
 package base;

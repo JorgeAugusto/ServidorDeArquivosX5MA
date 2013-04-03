@@ -116,9 +116,13 @@ public class ConexaoControleCliente implements Runnable {
         janelaCliente.atualizarTabelaArquivos();
     }
 
-    public Host processarBalanceamento() {
-        
+    /**
+     * Este método é responsável pelo balanceamento
+     * Pois é ele que ira enviar uma mensagem ao servidor solicitando para qual escravo deve ser feito o
+     * Upload do arquivo, no momento a escolha de para qual escravo deve ser "upado" o arquivo é feita de forma
+     * aleatória, mas no futuro será através deste método.
+     */
+    public void solicitarUploadServidor() {
 
-        return null;
     }
 }

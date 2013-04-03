@@ -58,7 +58,7 @@ public class Escravo {
         System.out.println(nome + " inciado com sucesso, aguardando conexões de clientes...");
 
         /**
-         * Loop infinito que recebe as conexão dos clientes e cria as novas Thread's
+         * Loop infinito que recebe as conexão dos clientes e cria as novas Thread's.
          */
         for(;;) {
             try {
