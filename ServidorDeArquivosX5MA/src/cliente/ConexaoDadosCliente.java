@@ -17,9 +17,10 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import javax.swing.JOptionPane;
 
-public class ConexaoDados implements Runnable {
+public class ConexaoDadosCliente implements Runnable {
     // Constantes
     private static final String     PASTA_DOWNLOADS = "Downloads";
+    public  static final int        TAMANHO_BUFFER  = 1;
 
     private Socket                  socket;
     private ObjectOutputStream      saida;          // para enviar mensagem de UP ou DOWN
@@ -33,7 +34,7 @@ public class ConexaoDados implements Runnable {
     /**
      * Construtor
      */
-    public ConexaoDados(JanelaCliente janelaCliente, Arquivo arquivoTrans, Mensagem.TipoMensagem tipoMensagem) throws Exception {
+    public ConexaoDadosCliente(JanelaCliente janelaCliente, Arquivo arquivoTrans, Mensagem.TipoMensagem tipoMensagem) throws Exception {
         this.arquivoTrans   = arquivoTrans;
         this.janelaCliente  = janelaCliente;
         this.tipoConexao    = TipoConexao.CLIENTE;
@@ -113,7 +114,7 @@ public class ConexaoDados implements Runnable {
             File                novoArquivo         = new File(PASTA_DOWNLOADS + "\\" + arquivoTrans.getNome());
             FileOutputStream    saidaNovoArquivo    = new FileOutputStream(novoArquivo);
 
-            byte[] b = new byte[1];  // 4 KB de buffer
+            byte[] b = new byte[TAMANHO_BUFFER];
 
             janelaCliente.setProgressBarMax((int) arquivoTrans.getTamanho());
             int i = 1;
@@ -123,9 +124,9 @@ public class ConexaoDados implements Runnable {
                 i += b.length;
             }
 
-            //saidaNovoArquivo.close();   // fecha arquivo
-            //entradaDados.close();       // fecha stream de entrada
-            //socket.close();             // fecha socket
+            saidaNovoArquivo.close();   // fecha arquivo
+            entradaDados.close();       // fecha stream de entrada
+            socket.close();             // fecha socket
         }
         catch(Exception ex) {
             JOptionPane.showMessageDialog(janelaCliente, "Erro ao Download o arquivo do servidor: " + ex);

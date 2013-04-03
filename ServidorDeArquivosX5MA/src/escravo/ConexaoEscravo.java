@@ -9,10 +9,10 @@ package escravo;
 import base.Arquivo;
 import base.Mensagem;
 import base.TipoConexao;
+import cliente.ConexaoDadosCliente;
 import java.io.*;
 import java.net.Socket;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
 
 public class ConexaoEscravo implements Runnable {
     private Socket                  socket;
@@ -191,15 +191,15 @@ public class ConexaoEscravo implements Runnable {
             FileInputStream     entradaArquivoDados = new FileInputStream(arquivoDados);
             FileOutputStream    saidaDadosCliente   = (FileOutputStream) socket.getOutputStream();
 
-            byte[] b = new byte[1];
+            byte[] b = new byte[ConexaoDadosCliente.TAMANHO_BUFFER];
 
             while (entradaArquivoDados.read(b) != -1) {
                 saidaDadosCliente.write(b);
             }
-            //saidaDadosCliente.flush();       // força despejo de algum dado restante
-            //saidaDadosCliente.close();       // fecha stream de saída
-            //entradaArquivoDados.close();     // fecha arquivo de entrada
-            // socket.close();                  // fecha o socket
+            saidaDadosCliente.flush();       // força despejo de algum dado restante
+            saidaDadosCliente.close();       // fecha stream de saída
+            entradaArquivoDados.close();     // fecha arquivo de entrada
+            //socket.close();                  // fecha o socket
         }
         catch (Exception ex) {
             System.err.println("Erro ao enviar dados para o cliente.");

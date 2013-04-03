@@ -278,7 +278,7 @@ public class JanelaCliente extends javax.swing.JFrame {
      */
     private void inicializacao() {
         try {
-            conexaoControle = new ConexaoControle(this);    // cria conexão de controle
+            conexaoControle = new ConexaoControleCliente(this);    // cria conexão de controle
             new Thread(conexaoControle).start();            // cria a nova Thread
         }
         catch(Exception ex) {
@@ -399,7 +399,7 @@ public class JanelaCliente extends javax.swing.JFrame {
      */
     private void downloadDeArquivo() {
         try {
-            new Thread(new ConexaoDados(this, getArquivoSelecionado(), Mensagem.TipoMensagem.DOWNLOAD)).start();
+            new Thread(new ConexaoDadosCliente(this, getArquivoSelecionado(), Mensagem.TipoMensagem.DOWNLOAD)).start();
         }
         catch(Exception ex) {
             escreverNaBarraStatus("Erro ao criar conexão de dados...");
@@ -420,7 +420,7 @@ public class JanelaCliente extends javax.swing.JFrame {
     /**
      * Declaração dos meus atributos.
      */
-    ConexaoControle conexaoControle;
+    ConexaoControleCliente conexaoControle;
 
 
 

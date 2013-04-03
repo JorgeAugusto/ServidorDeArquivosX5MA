@@ -14,9 +14,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.ArrayList;
-import javax.swing.JOptionPane;
 
-public class ConexaoControle implements Runnable {
+public class ConexaoControleCliente implements Runnable {
     private Socket                  socket;
     private ObjectInputStream       entrada;
     private ObjectOutputStream      saida;
@@ -29,7 +28,7 @@ public class ConexaoControle implements Runnable {
     /**
      * Construtor
      */
-    public ConexaoControle(JanelaCliente janelaCliente) throws Exception {
+    public ConexaoControleCliente(JanelaCliente janelaCliente) throws Exception {
         listaArquivos       = new ArrayList<Arquivo>();
         this.janelaCliente  = janelaCliente;
         tipoConexao         = TipoConexao.CLIENTE;
