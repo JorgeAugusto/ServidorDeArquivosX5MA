@@ -79,10 +79,6 @@ public class ConexaoEscravo implements Runnable {
      */
     public void processarMensagensClientes() {
         switch(mensagemRecebida.getTipoMensagem()) {
-            case LISTA_ARQUIVOS:
-
-            break;
-
             case UPLOAD:
                 receberArquivo();
             break;
@@ -99,14 +95,6 @@ public class ConexaoEscravo implements Runnable {
     public void processarMensagensServidor() {
         switch(mensagemRecebida.getTipoMensagem()) {
             case LISTA_ARQUIVOS:
-
-            break;
-
-            case UPLOAD:
-
-            break;
-
-            case DOWNLOAD:
 
             break;
         }
@@ -154,7 +142,6 @@ public class ConexaoEscravo implements Runnable {
         System.out.println("Lista de arquivos enviada com sucesso.");
     }
 
-
     /**
      * Este método cria a lista de arquivos a ser enviada para o servidor e
      * a ser mostrada na tabela de arquivos na JanelaEscravo
@@ -199,7 +186,7 @@ public class ConexaoEscravo implements Runnable {
             saidaDadosCliente.flush();       // força despejo de algum dado restante
             saidaDadosCliente.close();       // fecha stream de saída
             entradaArquivoDados.close();     // fecha arquivo de entrada
-            //socket.close();                  // fecha o socket
+            //socket.close();                // fecha o socket
         }
         catch (Exception ex) {
             System.err.println("Erro ao enviar dados para o cliente.");
@@ -212,7 +199,7 @@ public class ConexaoEscravo implements Runnable {
      * Este método recebe um arquivo de um cliente.
      */
     private void receberArquivo() {
-        System.out.println("Iniciando recebimento de arquivo para cliente...");
+        System.out.println("Iniciando recebimento de arquivo do cliente...");
         try {
             Arquivo             arquivoTrans        = (Arquivo) mensagemRecebida.getInfoMensagem();
 
@@ -234,9 +221,8 @@ public class ConexaoEscravo implements Runnable {
             System.err.println("Erro ao Download o arquivo do servidor: " + ex);
         }
 
-        System.out.println("Fim recebimento de arquivo para cliente...");
+        System.out.println("Fim recebimento de arquivo do cliente...");
     }
-
 
     /**
      * Este método extrai o nome simples do arquivo, (somente o nome), por que é enviado o nome completo (com caminho)
@@ -249,30 +235,6 @@ public class ConexaoEscravo implements Runnable {
         System.out.println("Nome simples: " + nomeSimples);
 
         return nomeSimples;
-    }
-
-    /**
-     * Este método processa a mensagem de identificação
-     */
-    public void processarIdentificacao() {
-
-    }
-
-    /**
-     * Este método processa a mensagemRecebida de recebimento de uma lista de arquivos
-     */
-    private synchronized void processarListaArquivo() {
-//        ArrayList<InfoArquivo> listaArquivosEscravo = (ArrayList<InfoArquivo>) mensagemRecebida.getInfoMensagem();
-//        ArrayList<InfoArquivo> listaArquivosTemp = new ArrayList<InfoArquivo>();
-//
-//        for(InfoArquivo arquivo : listaArquivosEscravo) {
-//            listaArquivosTemp.add(
-//            new InfoArquivo(arquivo.getNome(), new InfoServidor(getNome(), getIP(), arquivo.getServEscravo().getPorta()), arquivo.getTamanho() ));
-//        }
-//
-//        listaArquivos = listaArquivosTemp;
-//        servidor.getGerenteConexaoEscravos().processaListaArquivos();
-//        janelaServidor.adicionarHistorico("Processsando lista de arquivos de " + getNome() , EstadoSistema.OK);
     }
 
     /**
