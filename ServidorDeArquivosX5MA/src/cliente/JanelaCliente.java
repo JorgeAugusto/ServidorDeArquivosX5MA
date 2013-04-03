@@ -10,6 +10,7 @@
 package cliente;
 
 import base.Arquivo;
+import base.Mensagem;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -212,9 +213,8 @@ public class JanelaCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonFecharActionPerformed
 
     private void jButtonDownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonDownActionPerformed
-        // Enviar Solicitação de Download...
-        // Pegar o socket retornado e passar para a janela, que vai passar para thread
-        abrirJanDownload();
+        // Faz download de arquivo
+        downloadDeArquivo();
     }//GEN-LAST:event_jButtonDownActionPerformed
 
     private void windowOpenedActionPerformed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_windowOpenedActionPerformed
@@ -359,7 +359,9 @@ public class JanelaCliente extends javax.swing.JFrame {
 //        }
 //    }
 
-    // Este método preenche a JTable com os dados dos arquivos...
+    /**
+     * Este método preenche a JTable com os dados dos arquivos
+     */
     public void atualizarTabelaArquivos() {
         DefaultTableModel model = (DefaultTableModel) jTableArquivos.getModel();
         model.setRowCount(0);
@@ -371,13 +373,24 @@ public class JanelaCliente extends javax.swing.JFrame {
         escreverNaBarraStatus("Total de Arquivos: " + conexaoControle.getListaArquivos().size());
     }
 
-    // Este método abri a janela de download de arquivo...
-    private void abrirJanDownload() {
-//        janelaDownload = new JanelaDownload(this, true);
-//
-//        // coloca cadastro de servidores escravos no centro desta tela...
-//        janelaDownload.setLocationRelativeTo(this);
-//        janelaDownload.setVisible(true);
+    /**
+     * Retorna o arquivo selecinado.
+     */
+    private Arquivo getArquivoSelecionado() {
+        DefaultTableModel modelo = (DefaultTableModel) jTableArquivos.getModel();
+        return conexaoControle.getListaArquivos().get(jTableArquivos.getSelectedRow());
+    }
+
+    /**
+     * Este método cria uma nova Thread que é responsável por fazer o Download do arquivo.
+     */
+    private void downloadDeArquivo() {
+        try {
+            new Thread(new ConexaoDados(this, getArquivoSelecionado(), Mensagem.TipoMensagem.DOWNLOAD)).start();
+        }
+        catch(Exception ex) {
+            escreverNaBarraStatus("Erro ao criar conexão de dados...");
+        }
     }
 
     // Este método retorna o arquivo selecionado

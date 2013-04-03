@@ -81,6 +81,7 @@ public class ConexaoEscravo implements Runnable {
     public void processarMensagensClientes() {
         switch(mensagemRecebida.getTipoMensagem()) {
             case LISTA_ARQUIVOS:
+                
             break;
 
             case UPLOAD:

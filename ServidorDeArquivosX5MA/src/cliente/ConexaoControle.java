@@ -93,8 +93,6 @@ public class ConexaoControle implements Runnable {
         System.out.println("Identificação enviada com sucesso.");
     }
 
-
-    // Métodos privados
     /**
      * Este método envia ao servidor uma solicitação para que mesmo
      * envie uma lista contento os nomes dos arquivos que estão disponíveis
@@ -117,6 +115,5 @@ public class ConexaoControle implements Runnable {
     private void processarListaArquivos() {
         listaArquivos = (ArrayList<Arquivo>) mensagemRecebida.getInfoMensagem();
         janelaCliente.atualizarTabelaArquivos();
-        
     }
 }

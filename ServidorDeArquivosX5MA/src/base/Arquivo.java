@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 public class Arquivo implements Serializable {
     private String      nome;
-    private Host    host;
+    private Host        host;
     private long        tamanho;
 
     public Arquivo() { }
