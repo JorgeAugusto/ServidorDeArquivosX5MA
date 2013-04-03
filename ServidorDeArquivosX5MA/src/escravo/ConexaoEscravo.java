@@ -130,7 +130,6 @@ public class ConexaoEscravo implements Runnable {
         System.out.println("Identificação enviada com sucesso.");
     }
 
-
     /**
      * Este método envia uma mensagem contendo a lista de arquivos que estão no escravo
      */
@@ -148,7 +147,10 @@ public class ConexaoEscravo implements Runnable {
         }
         catch(Exception ex) {
             System.err.println("Erro ao enviar lista de arquivos para o servidor");
+            return;
         }
+
+        System.out.println("Lista de arquivos enviada com sucesso.");
     }
 
 
