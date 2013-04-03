@@ -20,7 +20,7 @@ import javax.swing.JOptionPane;
 public class ConexaoDadosCliente implements Runnable {
     // Constantes
     private static final String     PASTA_DOWNLOADS = "Downloads";
-    public  static final int        TAMANHO_BUFFER  = 1024;     // Buffer de 1 KB, quando maior mais rápido...
+    public  static final int        TAMANHO_BUFFER  = 1;     // Buffer de 1 KB, quando maior mais rápido...
 
     private Socket                  socket;
     private ObjectOutputStream      saida;          // para enviar mensagem de UP ou DOWN
