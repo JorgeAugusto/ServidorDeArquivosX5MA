@@ -1,7 +1,7 @@
 /**
  * Classe que modela a Conexão de Controle de um Cliente
  * @Descrição:
- * Esta classe modela a Conexão do Servidor com um Escravo.
+ * Esta classe controla a conexão de uma cliente com o servidor
  */
 
 package cliente;
@@ -88,8 +88,6 @@ public class ConexaoControleCliente implements Runnable {
             System.err.println("Erro ao enviar mensagem de identificação");
             return;
         }
-
-        System.out.println("Identificação enviada com sucesso.");
     }
 
     /**
