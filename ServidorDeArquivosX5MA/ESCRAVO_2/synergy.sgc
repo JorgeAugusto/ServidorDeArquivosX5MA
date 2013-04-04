@@ -1,0 +1,17 @@
+section: screens
+	auxiliar:
+		switchCorners = none
+		switchCornerSize = 0
+	engjorgeaugusto:
+		switchCorners = none
+		switchCornerSize = 0
+end
+section: links
+	auxiliar:
+		left = engjorgeaugusto
+	engjorgeaugusto:
+		right = auxiliar
+end
+section: options
+	keystroke(AudioPlay) = keyDown(AudioPlay,auxiliar); keyUp(AudioPlay,auxiliar)
+end

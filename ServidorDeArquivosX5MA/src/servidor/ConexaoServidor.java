@@ -126,6 +126,9 @@ public class ConexaoServidor implements Runnable {
         servidor.atualizarListaArquivos();
 
         System.out.println("Lista de arquivos recebida e processada com sucesso.");
+
+        // Depois que processar a lista de arquivos recebidos do servidor, envia a mesma para todos os clientes
+        enviarBroadCast();
     }
 
     /**
@@ -152,30 +155,17 @@ public class ConexaoServidor implements Runnable {
      * Este método envia uma mensagem em Broadcast, ou seja, para todos os
      * Servidores Escravos conectados
      */
-    private boolean enviarBroadCast() {
-//        janelaServidor.adicionarHistorico("Enviando solicitação de lista de arquivos em Broadcast...", EstadoSistema.PROCESSANDO);
-//        if(!servidor.getGerenteConexaoEscravos().temEscravoConectado()) {
-//            janelaServidor.adicionarHistorico("Broadcast falhou não há Servidores Escravos conectados", EstadoSistema.ERRO);
-//            return false;
-//        }
-//
-//        try{
-//            ArrayList<Conexao> listaEscravos = servidor.getGerenteConexaoEscravos().getListaEscravos();
-//
-//            for(ConexaoServidor conEscravo : listaEscravos) {
-//                // Se esta desconectado passa para o próximo
-//                if(conEscravo.getEstado() == EstadoEscravo.DESCONECTADO) continue;
-//
-//                conEscravo.solicitarListaArquivos();
-//            }
-//        }
-//        catch(Exception ex) {
-//            janelaServidor.adicionarHistorico("Enviando Broadcast", EstadoSistema.ERRO);
-//        }
-//
-//        janelaServidor.adicionarHistorico("Enviando solicitação de lista de arquivos em Broadcast", EstadoSistema.OK);
+    private void enviarBroadCast() {
+        if(servidor.getListaClientes().size() <= 0) return;
 
-        return true;
+        try{
+            for(ConexaoServidor conCliente : servidor.getListaClientes()) {
+                conCliente.enviarListaDeArquivos();
+            }
+        }
+        catch(Exception ex) {
+            System.err.println("Erro ao enviar lista de arquivos em broadcast para clientes.");
+        }
     }
 
     /**
